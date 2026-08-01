@@ -1,6 +1,9 @@
 C:\Users\Akiya\projects\weather-app\weather-backend\src\main\java\com\example\weather\client\OpenMeteoClient.java
 C:\Users\Akiya\projects\weather-app\weather-backend\src\main\java\com\example\weather\config\WeatherApiProperties.java
 C:\Users\Akiya\projects\weather-app\weather-backend\src\main\java\com\example\weather\controller\WeatherController.java
+C:\Users\Akiya\projects\weather-app\weather-backend\src\main\java\com\example\weather\exception\GlobalExceptionHandler.java
+C:\Users\Akiya\projects\weather-app\weather-backend\src\main\java\com\example\weather\model\City.java
+C:\Users\Akiya\projects\weather-app\weather-backend\src\main\java\com\example\weather\model\ErrorResponse.java
 C:\Users\Akiya\projects\weather-app\weather-backend\src\main\java\com\example\weather\model\OpenMeteoResponse.java
 C:\Users\Akiya\projects\weather-app\weather-backend\src\main\java\com\example\weather\model\WeatherCondition.java
 C:\Users\Akiya\projects\weather-app\weather-backend\src\main\java\com\example\weather\model\WeatherResponse.java
