@@ -1,7 +1,8 @@
 package com.example.weather.service;
 
 import com.example.weather.client.OpenMeteoClient;
-import com.example.weather.model.City;
+// import com.example.weather.model.City;
+import com.example.weather.model.GeocodingResponse;
 import com.example.weather.model.OpenMeteoResponse;
 import com.example.weather.model.WeatherCondition;
 import com.example.weather.model.WeatherResponse;
@@ -14,23 +15,23 @@ import org.springframework.stereotype.Service;
 public class WeatherService {
 
     private final OpenMeteoClient openMeteoClient;
+    private final GeocodingService geocodingService;
 
-    public WeatherService(OpenMeteoClient openMeteoClient) {
+    public WeatherService(OpenMeteoClient openMeteoClient, GeocodingService geocodingService) {
         this.openMeteoClient = openMeteoClient;
+        this.geocodingService = geocodingService;
     }
 
-    public WeatherResponse getWeather() {
-        return getWeather(City.TOKYO);
-    }
-
-    public WeatherResponse getWeather(City city) {
+    public WeatherResponse getWeather(String cityName) {
         // OpenMeteoClientを使用して、指定された都市の現在の天気情報を取得する
+        GeocodingResponse.Result location =
+                geocodingService.searchCity(cityName);
+
         OpenMeteoResponse apiResponse =
                 openMeteoClient.getCurrentWeather(
-                        city.getLatitude(),
-                        city.getLongitude()
+                        location.latitude(),
+                        location.longitude()
                 );
-
         // 取得したAPIレスポンスがnullまたはcurrentがnullの場合、IllegalStateExceptionをスローする
         if (apiResponse == null || apiResponse.current() == null) {
             throw new IllegalStateException(
@@ -48,11 +49,14 @@ public class WeatherService {
         // WeatherResponseを作成して返す
         return new WeatherResponse(
                 "success",
-                city.getDisplayName(),
+                location.name(),
+                location.admin1(),
+                location.country(),
                 current.temperature(),
                 current.weatherCode(),
                 condition.getDescription(),
-                current.windSpeed()
+                current.windSpeed(),
+                current.time()
         );
     }
 }

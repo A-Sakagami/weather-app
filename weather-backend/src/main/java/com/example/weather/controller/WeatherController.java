@@ -1,8 +1,13 @@
 package com.example.weather.controller;
 
 import com.example.weather.model.City;
+import com.example.weather.model.CityResponse;
 import com.example.weather.model.WeatherResponse;
 import com.example.weather.service.WeatherService;
+
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,11 +29,30 @@ public class WeatherController {
         this.weatherService = weatherService;
     }
 
+    // 天気情報を取得するAPIエンドポイント
     @GetMapping
     public WeatherResponse getWeather(
             @RequestParam(defaultValue = "TOKYO") String city
     ) {
-        City selectedCity = City.fromName(city);
-        return weatherService.getWeather(selectedCity);
+        return weatherService.getWeather(city);
+    }
+
+    //     @GetMapping
+    // public WeatherResponse getWeather(
+    //         @RequestParam(defaultValue = "TOKYO") String city
+    // ) {
+    //     City selectedCity = City.fromName(city);
+    //     return weatherService.getWeather(selectedCity);
+    // }
+
+    // enum Cityの値を取得するAPIエンドポイント
+    @GetMapping("/cities")
+    public List<CityResponse> getCities() {
+        return Arrays.stream(City.values())
+                .map(city -> new CityResponse(
+                        city.name(),
+                        city.getDisplayName()
+                ))
+                .toList();
     }
 }
