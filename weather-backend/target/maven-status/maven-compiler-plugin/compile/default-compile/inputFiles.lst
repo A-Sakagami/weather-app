@@ -2,6 +2,8 @@ C:\Users\Akiya\projects\weather-app\weather-backend\src\main\java\com\example\we
 C:\Users\Akiya\projects\weather-app\weather-backend\src\main\java\com\example\weather\client\OpenMeteoClient.java
 C:\Users\Akiya\projects\weather-app\weather-backend\src\main\java\com\example\weather\config\WeatherApiProperties.java
 C:\Users\Akiya\projects\weather-app\weather-backend\src\main\java\com\example\weather\controller\WeatherController.java
+C:\Users\Akiya\projects\weather-app\weather-backend\src\main\java\com\example\weather\exception\ApiErrorResponse.java
+C:\Users\Akiya\projects\weather-app\weather-backend\src\main\java\com\example\weather\exception\CityNotFoundException.java
 C:\Users\Akiya\projects\weather-app\weather-backend\src\main\java\com\example\weather\exception\GlobalExceptionHandler.java
 C:\Users\Akiya\projects\weather-app\weather-backend\src\main\java\com\example\weather\model\City.java
 C:\Users\Akiya\projects\weather-app\weather-backend\src\main\java\com\example\weather\model\CityResponse.java

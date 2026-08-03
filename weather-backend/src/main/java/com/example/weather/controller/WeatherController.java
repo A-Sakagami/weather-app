@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 天候関連のAPIエンドポイントを処理するためのコントローラー。
+ * @param weatherService 天候情報を取得するためのサービス
  */
 @RestController
 @RequestMapping("/api/weather")
@@ -32,9 +33,10 @@ public class WeatherController {
     // 天気情報を取得するAPIエンドポイント
     @GetMapping
     public WeatherResponse getWeather(
-            @RequestParam(defaultValue = "TOKYO") String city
+            @RequestParam(defaultValue = "TOKYO") String city,
+            @RequestParam(required = false) String country
     ) {
-        return weatherService.getWeather(city);
+        return weatherService.getWeather(city, country);
     }
 
     //     @GetMapping

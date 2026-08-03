@@ -1,5 +1,6 @@
 package com.example.weather.model;
 
+import java.time.OffsetDateTime;
 /**
  * 気象情報の応答を表すレコード。
  * @param status 成功または失敗のステータスを示す文字列。
@@ -10,7 +11,7 @@ package com.example.weather.model;
  * @param weatherCode 天候コードを示す整数。
  * @param weatherDescription 天候の説明を示す文字列。
  * @param windSpeed 現在の風速を示す数値。
- * @param observedAt 天気情報が観測された日時を示す文字列。
+ * @param time 天気情報が観測された日時を示す文字列。
  */
 public record WeatherResponse(
         String status,
@@ -21,6 +22,6 @@ public record WeatherResponse(
         int weatherCode,
         String weatherDescription,
         double windSpeed,
-        String observedAt
+        OffsetDateTime time
 ) {
 }

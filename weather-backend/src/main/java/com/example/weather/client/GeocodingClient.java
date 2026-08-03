@@ -5,6 +5,10 @@ import com.example.weather.model.GeocodingResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
+/**
+ * ジオコーディングAPIクライアント。指定された都市名に基づいて、緯度、経度、およびタイムゾーンを取得する。
+ * GeocodingClient
+ */
 @Component
 public class GeocodingClient {
 

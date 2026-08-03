@@ -6,10 +6,17 @@ import com.example.weather.model.GeocodingResponse;
 import com.example.weather.model.OpenMeteoResponse;
 import com.example.weather.model.WeatherCondition;
 import com.example.weather.model.WeatherResponse;
+
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+
 import org.springframework.stereotype.Service;
 
 /**
  * 気象関連の処理を行うためのサービスクラス。
+ * @param openMeteoClient OpenMeteo APIクライアント
+ * @param geocodingService ジオコーディングサービス
  */
 @Service
 public class WeatherService {
@@ -22,15 +29,16 @@ public class WeatherService {
         this.geocodingService = geocodingService;
     }
 
-    public WeatherResponse getWeather(String cityName) {
+    public WeatherResponse getWeather(String cityName, String country) {
         // OpenMeteoClientを使用して、指定された都市の現在の天気情報を取得する
         GeocodingResponse.Result location =
-                geocodingService.searchCity(cityName);
+                geocodingService.searchCity(cityName, country);
 
         OpenMeteoResponse apiResponse =
                 openMeteoClient.getCurrentWeather(
                         location.latitude(),
-                        location.longitude()
+                        location.longitude(), 
+                        location.timezone()
                 );
         // 取得したAPIレスポンスがnullまたはcurrentがnullの場合、IllegalStateExceptionをスローする
         if (apiResponse == null || apiResponse.current() == null) {
@@ -45,8 +53,16 @@ public class WeatherService {
         // 天候コードからWeatherConditionを取得する
         WeatherCondition condition =
                 WeatherCondition.fromCode(current.weatherCode());
+                        
+        // 現在の天気情報の時間をLocalDateTimeに変換し、指定されたタイムゾーンでOffsetDateTimeに変換する
+        LocalDateTime localDateTime =
+                LocalDateTime.parse(current.time());
+        OffsetDateTime observedAt =
+                localDateTime
+                        .atZone(ZoneId.of(location.timezone()))
+                        .toOffsetDateTime();
 
-        // WeatherResponseを作成して返す
+        // JSON形式のWeatherResponseを作成して返す
         return new WeatherResponse(
                 "success",
                 location.name(),
@@ -56,7 +72,7 @@ public class WeatherService {
                 current.weatherCode(),
                 condition.getDescription(),
                 current.windSpeed(),
-                current.time()
+                observedAt
         );
     }
 }
