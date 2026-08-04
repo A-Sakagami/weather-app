@@ -79,8 +79,14 @@ function App() {
 
       {weather && (
         <section className="weather-result" aria-live="polite">
-          <h2>{locationName}の天気</h2>
-
+          <h2>
+            {weather.country === '日本' || weather.country === 'Japan'
+              ? weather.prefecture === weather.city
+                ? weather.city
+                : `${weather.prefecture}${weather.city}`
+              : weather.city}
+            の天気
+          </h2>
           <div className="weather-summary">
             <span className="weather-icon" aria-hidden="true">
               {getWeatherIcon(weather.weatherCode)}
