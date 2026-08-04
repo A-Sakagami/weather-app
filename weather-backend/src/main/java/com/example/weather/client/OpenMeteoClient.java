@@ -37,6 +37,7 @@ public class OpenMeteoClient {
                                 "current",
                                 "temperature_2m,weather_code,wind_speed_10m"
                         )
+                        .queryParam("wind_speed_unit", "ms")
                         .queryParam("timezone", timezone)
                         .build())
                 .retrieve()
