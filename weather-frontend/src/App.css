@@ -1,0 +1,142 @@
+main {
+  width: min(90%, 480px);
+  padding: 32px;
+  border-radius: 12px;
+  background-color: #ffffff;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 10%);
+}
+
+h1 {
+  margin: 0 0 24px;
+  color: #213547;
+  text-align: center;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+label {
+  color: #213547;
+  font-weight: bold;
+}
+
+input {
+  padding: 12px;
+  border: 1px solid #b8c2cc;
+  border-radius: 6px;
+  font: inherit;
+}
+
+input:focus {
+  border-color: #1d7fd7;
+  outline: 2px solid rgb(29 127 215 / 20%);
+}
+
+button {
+  margin-top: 8px;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  color: #ffffff;
+  background-color: #1d7fd7;
+  font: inherit;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #1769b2;
+}
+
+/* Section styles */
+main section {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #dbe3ea;
+}
+
+main section h2 {
+  margin: 0 0 16px;
+  color: #213547;
+}
+
+main section p {
+  margin: 8px 0;
+  color: #213547;
+}
+
+/* Error message styles */
+[role='alert'] {
+  margin: 16px 0 0;
+  padding: 12px;
+  border-radius: 6px;
+  color: #b42318;
+  background-color: #fef3f2;
+  line-height: 1.5;
+}
+
+/* Weather result styles */
+.weather-result {
+  text-align: left;
+}
+
+.weather-result h2 {
+  font-size: 1.5rem;
+  line-height: 1.4;
+}
+
+.weather-summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.weather-icon {
+  flex-shrink: 0;
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.weather-description {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.weather-details {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+}
+
+.weather-details > div {
+  display: grid;
+  grid-template-columns: 5rem 1fr;
+  align-items: baseline;
+  padding: 12px;
+  border-radius: 6px;
+  background-color: #f3f7fa;
+}
+
+.weather-details dt {
+  font-weight: 700;
+}
+
+.weather-details dd {
+  margin: 0;
+  font-size: 1.125rem;
+}
+
+button,
+input {
+  min-height: 44px;
+}
+
+button:focus-visible,
+input:focus-visible {
+  outline: 3px solid #0b6fc2;
+  outline-offset: 3px;
+}
