@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import './App.css'
 
+// バックエンドから受け取る天気情報の構造を定義する。
+// APIレスポンスの項目名や型が変わった場合は、ここも合わせて変更する。
 type WeatherData = {
   status: string
   city: string
@@ -13,6 +15,8 @@ type WeatherData = {
   time: string
 }
 
+// Open-Meteoの天気コードを、画面表示用のアイコンへ変換する。
+// 未知のコードにも対応できるよう、最後に共通アイコンを返す。
 const getWeatherIcon = (weatherCode: number) => {
   if (weatherCode === 0) return '☀️'
   if (weatherCode === 1 || weatherCode === 2) return '🌤️'
@@ -29,7 +33,12 @@ const getWeatherIcon = (weatherCode: number) => {
 }
 
 function App() {
+  // 正常に取得できた天気情報を保持する。
+  // まだ検索していない場合や取得に失敗した場合はnullになる。
   const [weather, setWeather] = useState<WeatherData | null>(null)
+
+  // 利用者に表示するエラーメッセージを保持する。
+  // 空文字の場合はエラーを表示しない。
   const [error, setError] = useState('')
 
   const handleSubmit = async (formData: FormData) => {
@@ -98,7 +107,7 @@ function App() {
 
           <dl className="weather-details">
             <div>
-              <dt>気温</dt>
+              <dt>現在の気温</dt>
               <dd>{weather.temperature}℃</dd>
             </div>
             <div>
@@ -106,6 +115,12 @@ function App() {
               <dd>{weather.windSpeed}m/s</dd>
             </div>
           </dl>
+          <div id="powered-by">
+            <p>powered by <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a></p>
+          </div>
+          <div id="copyright">
+            <p>©A-Sakagami 2026-{new Date().getFullYear()}</p>
+          </div>
         </section>
       )}
     </main>
