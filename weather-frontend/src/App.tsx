@@ -41,13 +41,17 @@ function App() {
   // 空文字の場合はエラーを表示しない。
   const [error, setError] = useState('')
 
+  // フォーム送信時に都市名を受け取り、バックエンドから天気情報を取得する。
+  // apiの応答を待つため、非同期関数asyncとして定義する。
   const handleSubmit = async (formData: FormData) => {
     const city = formData.get('city')
 
+    // FormDataの値は文字列とは限らないため、型と空欄を確認する。
     if (typeof city !== 'string' || city.trim() === '') {
       return
     }
 
+    // 前回の検索で表示されたエラーを消してから、新しい検索を始める。
     setError('')
 
     try {
@@ -56,17 +60,25 @@ function App() {
       )
 
       if (!response.ok) {
+        // fetchは404や500でも通常のレスポンスとして完了するため、
+        // HTTPエラーを明示的に例外として扱う。
         throw new Error()
       }
 
       const data: WeatherData = await response.json()
       setWeather(data)
     } catch {
+      // 以前の正常な結果を残さず、今回の検索が失敗したことを表示する。
       setWeather(null)
       setError('天気情報を取得できませんでした。都市名を確認してください。')
     }
   }
-
+  // 表示部分で設定しているクラスには、次の役割があります。
+  // weather-result	検索結果全体の配置を整える
+  // weather-summary	アイコンと説明文を横並びにする
+  // weather-icon	アイコンの大きさや位置を調整する
+  // weather-description	天気説明を読みやすく強調する
+  // weather-details	気温・風速を同じ形式で配置する
   return (
     <main>
       <h1>お天気アプリ</h1>
