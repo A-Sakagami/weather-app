@@ -1,10 +1,6 @@
 package com.example.weather.model;
 
-/**
- * 天候の状態を表す列挙型。
- */
 public enum WeatherCondition {
-
     CLEAR("晴れ"),
     MAINLY_CLEAR("おおむね晴れ"),
     PARTLY_CLOUDY("一部曇り"),
@@ -26,6 +22,23 @@ public enum WeatherCondition {
 
     public String getDescription() {
         return description;
+    }
+
+    public static WeatherCondition fromCurrentWeather(
+            int weatherCode,
+            double precipitation,
+            double rain,
+            double showers
+    ) {
+        if (showers > 0) {
+            return RAIN_SHOWER;
+        }
+
+        if (rain > 0 || precipitation > 0) {
+            return RAIN;
+        }
+
+        return fromCode(weatherCode);
     }
 
     public static WeatherCondition fromCode(int weatherCode) {
