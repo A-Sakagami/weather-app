@@ -1,0 +1,42 @@
+name: Backend Tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: backend-tests-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Maven Test
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: weather-backend
+
+    steps:
+      # リポジトリのソースコードを実行環境へ取得する。
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      # テストで使用するJavaを準備する。
+      # Mavenの依存関係もキャッシュし、2回目以降の実行を高速化する。
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+          cache-dependency-path: weather-backend/pom.xml
+
+      # Maven Wrapperを使用して、コンパイルとJUnitテストを実行する。
+      # bash経由なので、mvnwに実行権限が設定されていなくても実行できる。
+      - name: Run tests
+        run: bash mvnw --batch-mode --no-transfer-progress clean test
