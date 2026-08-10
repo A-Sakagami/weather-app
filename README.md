@@ -14,4 +14,6 @@ Java、Spring Boot、React、AWSを使用して作成したシンプルな天気
 - [x] Reactプロジェクト作成
 - [x] フロントエンドとバックエンドの接続
 - [x] 天気APIとの接続
+- [x] Github Actionsを用いたテスト自動化
+- [x] Github Releasesを用いてリリース
 - [ ] AWSへのデプロイ
