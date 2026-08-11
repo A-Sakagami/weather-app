@@ -155,6 +155,7 @@ public enum WeatherCondition {
      * <p>判定には次の優先順位が適用される。
      *
      * <ol>
+     *     <li>天気コードが雪またはにわか雪なら、対応する雪の天候</li>
      *     <li>にわか雨量が0より大きければ「にわか雨」</li>
      *     <li>雨量または総降水量が0より大きければ「雨」</li>
      *     <li>降水がなければ天気コードによる判定</li>
@@ -176,6 +177,16 @@ public enum WeatherCondition {
             double rain,
             double showers
     ) {
+        WeatherCondition conditionFromCode = fromCode(weatherCode);
+
+        /*
+         * 総降水量には雪も含まれるため、雪の天気コードを
+         * 降水量による雨の判定より優先する。
+         */
+        if (conditionFromCode == SNOW || conditionFromCode == SNOW_SHOWER) {
+            return conditionFromCode;
+        }
+
         /*
          * にわか雨による降水が記録されている場合は、
          * 天気コードより優先して「にわか雨」と判定する。
@@ -196,7 +207,7 @@ public enum WeatherCondition {
          * 降水が記録されていない場合は、
          * Open-Meteoの天気コードを使用して天候を判定する。
          */
-        return fromCode(weatherCode);
+        return conditionFromCode;
     }
 
     /**
