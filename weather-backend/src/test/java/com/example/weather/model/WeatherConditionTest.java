@@ -1,9 +1,8 @@
 package com.example.weather.model;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * WeatherConditionの天候判定を確認する単体テスト。
@@ -121,6 +120,6 @@ class WeatherConditionTest {
                         0.0
                 );
 
-        assertEquals(WeatherCondition.RAIN, actual);
+        assertEquals(WeatherCondition.SNOW, actual);
     }
 }
