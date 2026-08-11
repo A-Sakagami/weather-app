@@ -15,6 +15,8 @@ type WeatherData = {
   time: string
 }
 
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL ?? ''
+
 // Open-Meteoの天気コードを、画面表示用のアイコンへ変換する。
 // 未知のコードにも対応できるよう、最後に共通アイコンを返す。
 const getWeatherIcon = (weatherCode: number) => {
@@ -56,7 +58,7 @@ function App() {
 
     try {
       const response = await fetch(
-        `/api/weather?city=${encodeURIComponent(city.trim())}`,
+        `${apiBaseUrl}/api/weather?city=${encodeURIComponent(city.trim())}`,
       )
 
       if (!response.ok) {
