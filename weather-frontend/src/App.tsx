@@ -103,17 +103,19 @@ function App() {
       {weather && (
         <section className="weather-result" aria-live="polite">
           <h2>
-            {weather.country === '日本' || weather.country === 'Japan'
-              ? weather.prefecture === weather.city
-                ? weather.city
-                : `${weather.prefecture}${weather.city}`
-              : weather.city}
-            の天気
+            <span>
+              {weather.country === '日本' || weather.country === 'Japan'
+                ? weather.prefecture === weather.city
+                  ? weather.city
+                  : `${weather.prefecture}${weather.city}`
+                : weather.city}
+              の天気
+            </span>
           </h2>
           <div className="weather-summary">
-            <span className="weather-icon" aria-hidden="true">
-              {getWeatherIcon(weather.weatherCode)}
-            </span>
+              <span className="weather-icon" aria-hidden="true">
+                {getWeatherIcon(weather.weatherCode)}
+              </span>
             <p className="weather-description">
               {weather.weatherDescription}
             </p>
@@ -129,14 +131,14 @@ function App() {
               <dd>{weather.windSpeed}m/s</dd>
             </div>
           </dl>
-          <div id="powered-by">
+        </section>
+      )}
+      <div id="powered-by">
             <p>powered by <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a></p>
           </div>
           <div id="copyright">
             <p>©A-Sakagami 2026-{new Date().getFullYear()}</p>
-          </div>
-        </section>
-      )}
+      </div>
     </main>
   )
 }

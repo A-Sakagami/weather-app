@@ -8,7 +8,7 @@ Thumbs.db
 *.iml
 
 # Java / Maven
-backend/target/
+weather-backend/target/
 *.class
 *.log
 
@@ -23,3 +23,5 @@ frontend/.env.local
 
 # Temporary files
 *.tmp
+
+weather-backend/Procfile
