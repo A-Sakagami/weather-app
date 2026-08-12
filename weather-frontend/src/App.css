@@ -6,6 +6,12 @@ main {
   box-shadow: 0 8px 24px rgb(0 0 0 / 10%);
 }
 
+/* Clip tooltip so it doesn't render outside main */
+main {
+  position: relative;
+  overflow: visible;
+}
+
 h1 {
   margin: 0 0 24px;
   color: #213547;
@@ -61,6 +67,9 @@ main section {
 main section h2 {
   margin: 0 0 16px;
   color: #213547;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 main section p {
@@ -106,6 +115,25 @@ main section p {
   line-height: 1;
 }
 
+.info-icon {
+  background: transparent;
+  border: none;
+  padding: 4px;
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  color: #1d7fd7;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.info-icon:focus-visible {
+  outline: 3px solid #0b6fc2;
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
 .weather-description {
   font-size: 1.125rem;
   font-weight: 600;
@@ -145,4 +173,60 @@ button:focus-visible,
 input:focus-visible {
   outline: 3px solid #0b6fc2;
   outline-offset: 3px;
+}
+
+/* Tooltip styles */
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-trigger {
+  display: inline-block;
+}
+
+.tooltip-bubble {
+  position: fixed;
+  background: #213547;
+  color: #fff;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  white-space: normal;
+  max-width: min(320px, calc(100% - 32px));
+  word-break: break-word;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 120ms ease, transform 120ms ease;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.tooltip-bubble.visible,
+.tooltip:hover .tooltip-bubble,
+.tooltip:focus-within .tooltip-bubble {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+
+.tooltip-bubble::after {
+  content: '';
+  position: absolute;
+  left: var(--arrow-left, 50%);
+  transform: translateX(-50%);
+  border-width: 6px 6px 0 6px;
+  border-style: solid;
+}
+
+.tooltip-bubble[data-placement='top']::after {
+  bottom: -6px;
+  border-color: #213547 transparent transparent transparent;
+}
+.tooltip-bubble[data-placement='bottom']::after {
+  top: -6px;
+  border-width: 0 6px 6px 6px;
+  border-color: transparent transparent #213547 transparent;
 }
