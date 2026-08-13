@@ -1,11 +1,12 @@
 package com.example.weather.service;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.example.weather.client.GeocodingClient;
 import com.example.weather.exception.CityNotFoundException;
 import com.example.weather.model.GeocodingResponse;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * 都市名から位置情報を検索し、利用する都市候補を決定するService。
@@ -44,6 +45,40 @@ public class GeocodingService {
          * 「北見市」「北見区」「北見町」「北見村」の順で検索する。
          */
         private static final List<String> ADMINISTRATIVE_SUFFIXES = List.of("市", "区", "町", "村");
+
+        /**
+         * Geocoding APIの検索結果を使用せず、
+         * 固定の位置情報を使用する市町村。
+         *
+         * <p>
+         * 市町村名によってGeocoding APIが意図しない地点を返す場合に、
+         * 正しい市町村名、緯度、経度などをあらかじめ登録して使用する。
+         */
+        private static final List<ExceptionalMunicipality> EXCEPTIONAL_MUNICIPALITIES =
+                List.of(
+                        new ExceptionalMunicipality("美幌",43.823928, 144.107242,"日本","北海道","Asia/Tokyo"),
+                        new ExceptionalMunicipality("津別",43.706267, 144.025253,"日本","北海道","Asia/Tokyo")
+                );
+
+        /**
+         * Geocoding APIの通常検索を使用しない市町村の位置情報。
+         *
+         * @param name      画面へ表示する正式な市町村名
+         * @param latitude  緯度
+         * @param longitude 経度
+         * @param admin1    都道府県名
+         * @param country   国名
+         * @param timezone  タイムゾーン
+         */
+        private record ExceptionalMunicipality(
+                String name,
+                double latitude,
+                double longitude,
+                String country,
+                String admin1,
+                String timezone
+        ) {
+        }
 
         /**
         * Geocoding APIとの通信を担当するClient。
@@ -100,6 +135,27 @@ public class GeocodingService {
                 * normalizedCityNameとして保持する。
                 */
                 String normalizedCityName = cityName.trim();
+
+                /*
+                * Geocoding APIでは正しい地点を取得できない
+                * 例外市町村に該当するか確認する。
+                *
+                * 該当する場合はAPI検索を行わず、
+                * あらかじめ登録した位置情報を使用する。
+                */
+                ExceptionalMunicipality exceptionalMunicipality =
+                        findExceptionalMunicipality(normalizedCityName);
+
+                if (exceptionalMunicipality != null) {
+                        return new GeocodingResponse.Result(
+                                exceptionalMunicipality.name(),
+                                exceptionalMunicipality.latitude(),
+                                exceptionalMunicipality.longitude(),
+                                exceptionalMunicipality.country(),
+                                exceptionalMunicipality.admin1(),
+                                exceptionalMunicipality.timezone()
+                        );
+                }
 
                 /*
                 * 都市名をGeocoding APIで検索する。
@@ -218,5 +274,52 @@ public class GeocodingService {
         private boolean hasAdministrativeSuffix(String cityName) {
                 return ADMINISTRATIVE_SUFFIXES.stream()
                                 .anyMatch(cityName::endsWith);
+        }
+
+        /**
+         * 入力された都市名が例外市町村として登録されているか検索する。
+         *
+         * <p>
+         * 「○○」と「○○市」の両方を同じ市町村として扱えるよう、
+         * 登録された正式名称から行政区分を除いた名称とも比較する。
+         *
+         * @param cityName 前後の空白を除去した都市名
+         * @return 該当する例外市町村。存在しない場合はnull
+         */
+        private ExceptionalMunicipality findExceptionalMunicipality(
+                String cityName
+        ) {
+                return EXCEPTIONAL_MUNICIPALITIES.stream()
+                        .filter(municipality ->
+                                municipality.name().equals(cityName)
+                                        || removeAdministrativeSuffix(
+                                                municipality.name()
+                                        ).equals(cityName)
+                        )
+                        .findFirst()
+                        .orElse(null);
+        }
+
+        /**
+         * 市町村名の末尾から行政区分を取り除く。
+         *
+         * <p>
+         * 例えば「北見市」は「北見」、
+         * 「○○町」は「○○」として返す。
+         *
+         * @param cityName 市町村名
+         * @return 行政区分を取り除いた市町村名
+         */
+        private String removeAdministrativeSuffix(String cityName) {
+                for (String suffix : ADMINISTRATIVE_SUFFIXES) {
+                        if (cityName.endsWith(suffix)) {
+                                return cityName.substring(
+                                        0,
+                                        cityName.length() - suffix.length()
+                                );
+                        }
+                }
+
+                return cityName;
         }
 }
