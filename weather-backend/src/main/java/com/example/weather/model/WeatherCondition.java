@@ -66,7 +66,7 @@ public enum WeatherCondition {
      * 継続的に降る雨。
      *
      * <p>通常の雨と着氷性の雨をまとめて表し、
-     * 天気コード61、63、65、66、67に対応する。
+     * 天気コード61、63、66、67に対応する。
      *
      * <p>天気コードにかかわらず、現在の雨量または
      * 総降水量が0より大きい場合にも使用される。
@@ -154,12 +154,12 @@ public enum WeatherCondition {
      *
      * <p>判定には次の優先順位が適用される。
      *
-     * <ol>
-     *     <li>天気コードが雪またはにわか雪なら、対応する雪の天候</li>
-     *     <li>にわか雨量が0より大きければ「にわか雨」</li>
-     *     <li>雨量または総降水量が0より大きければ「雨」</li>
-     *     <li>降水がなければ天気コードによる判定</li>
-     * </ol>
+    * <ol>
+    *     <li>天気コードが雪、にわか雪、または大雨なら、対応する天候</li>
+    *     <li>にわか雨量が0より大きければ「にわか雨」</li>
+    *     <li>雨量または総降水量が0より大きければ「雨」</li>
+    *     <li>降水がなければ天気コードによる判定</li>
+    * </ol>
      *
      * <p>にわか雨量を先に判定することで、
      * 総降水量も同時に記録されている場合に
@@ -183,7 +183,8 @@ public enum WeatherCondition {
          * 総降水量には雪も含まれるため、雪の天気コードを
          * 降水量による雨の判定より優先する。
          */
-        if (conditionFromCode == SNOW || conditionFromCode == SNOW_SHOWER) {
+        if (conditionFromCode == SNOW
+            || conditionFromCode == SNOW_SHOWER) {
             return conditionFromCode;
         }
 
@@ -218,7 +219,8 @@ public enum WeatherCondition {
      *
      * <p>例えば、雨には強さや着氷の有無によって
      * 複数の天気コードがあるが、このアプリでは
-     * コード61、63、65、66、67をすべて{@link #RAIN}として扱う。
+    * コード61、63、66、67を{@link #RAIN}、コード65を
+    * {@link #HEAVY_RAIN}として扱う。
      *
      * <p>定義されていないコードは{@link #UNKNOWN}へ変換するため、
      * 想定外の値が返された場合でも{@code null}を返さずに処理できる。
@@ -252,7 +254,7 @@ public enum WeatherCondition {
              * 弱いものから強いものまでの雨と、
              * 着氷性の雨。
              */
-            case 61, 63, 65, 66, 67 -> RAIN;
+            case 61, 63 ,65, 66, 67 -> RAIN;
 
             /*
              * 弱いものから強いものまでの雪と霧雪。
