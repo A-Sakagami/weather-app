@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './App.css'
+import { getWeatherBackground, isDay } from "./weatherBackground"
 
 // バックエンドから受け取る天気情報の構造を定義する。
 // APIレスポンスの項目名や型が変わった場合は、ここも合わせて変更する。
@@ -39,6 +40,7 @@ function App() {
   // 正常に取得できた天気情報を保持する。
   // まだ検索していない場合や取得に失敗した場合はnullになる。
   const [weather, setWeather] = useState<WeatherData | null>(null)
+  const [view, setView] = useState<'search' | 'result'>('search')
 
   // 利用者に表示するエラーメッセージを保持する。
   // 空文字の場合はエラーを表示しない。
@@ -70,11 +72,20 @@ function App() {
 
       const data: WeatherData = await response.json()
       setWeather(data)
+      setView('result')
     } catch {
       // 以前の正常な結果を残さず、今回の検索が失敗したことを表示する。
       setWeather(null)
       setError('天気情報を取得できませんでした。都市名を確認してください。')
     }
+  }
+
+  const night = weather ? !isDay(weather.time) : false
+  const nightStyle = night ? { color: '#ffffff' } : undefined
+
+  const handleReset = () => {
+    setView('search')
+    setWeather(null)
   }
   // 表示部分で設定しているクラスには、次の役割があります。
   // weather-result	検索結果全体の配置を整える
@@ -83,61 +94,64 @@ function App() {
   // weather-description	天気説明を読みやすく強調する
   // weather-details	気温・風速を同じ形式で配置する
   return (
-    <main>
-      <h1>お天気アプリ</h1>
+    <main style={{ background: getWeatherBackground(weather?.weatherCode, weather?.time) }}>
+      <h1 style={nightStyle}>お天気アプリ</h1>
 
-      <form action={handleSubmit}>
-        <label htmlFor="city">都市名</label>
-        <input
-          id="city"
-          name="city"
-          type="text"
-          placeholder="例：Tokyo"
-          autoComplete="address-level2"
-          required
-        />
-        <button type="submit">天気を調べる</button>
-      </form>
-
-      {error && <p role="alert">{error}</p>}
-
-      {weather && (
-        <section className="weather-result" aria-live="polite">
-          <h2>
-            <span>
-              {weather.country === '日本' || weather.country === 'Japan'
-                ? weather.prefecture === weather.city
-                  ? weather.city
-                  : `${weather.prefecture}${weather.city}`
-                : weather.city}
-              の天気
-            </span>
-          </h2>
-          <div className="weather-summary">
-              <span className="weather-icon" aria-hidden="true">
+      {view === 'search' ? (
+        <>
+          <form action={handleSubmit}>
+            <label htmlFor="city">都市名</label>
+            <input
+              id="city"
+              name="city"
+              type="text"
+              placeholder="例：Tokyo"
+              autoComplete="address-level2"
+              required
+            />
+            <button className="search" type="submit">天気を調べる</button>
+          </form>
+          {error && <p role="alert">{error}</p>}
+        </>
+      ) : weather && (
+        <>
+          <section className="weather-result" aria-live="polite">
+            <h2 style={nightStyle}>
+              <span>
+                {weather.country === '日本' || weather.country === 'Japan'
+                  ? weather.prefecture === weather.city
+                    ? weather.city
+                    : `${weather.prefecture}${weather.city}`
+                  : weather.city}
+                の天気
+              </span>
+            </h2>
+            <div className="weather-summary">
+              <span className="weather-icon" style={nightStyle} aria-hidden="true">
                 {getWeatherIcon(weather.weatherCode)}
               </span>
-            <p className="weather-description">
-              {weather.weatherDescription}
-            </p>
-          </div>
-
-          <dl className="weather-details">
-            <div>
-              <dt>現在の気温</dt>
-              <dd>{weather.temperature}℃</dd>
+              <p className="weather-description" style={nightStyle}>
+                {weather.weatherDescription}
+              </p>
             </div>
-            <div>
-              <dt>風速</dt>
-              <dd>{weather.windSpeed}m/s</dd>
-            </div>
-          </dl>
-        </section>
+            <dl className="weather-details">
+              <div>
+                <dt>現在の気温</dt>
+                <dd>{weather.temperature}℃</dd>
+              </div>
+              <div>
+                <dt>風速</dt>
+                <dd>{weather.windSpeed}m/s</dd>
+              </div>
+            </dl>
+          </section>
+          <button className="reset" style={nightStyle} onClick={handleReset}>もう一度調べる</button>
+        </>
       )}
-      <div id="powered-by">
+      <div id="powered-by" style={nightStyle}>
             <p>powered by <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a></p>
           </div>
-          <div id="copyright">
+          <div id="copyright" style={nightStyle}>
             <p>©A-Sakagami 2026-{new Date().getFullYear()}</p>
       </div>
     </main>

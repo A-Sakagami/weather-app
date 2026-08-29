@@ -4,6 +4,8 @@ main {
   border-radius: 12px;
   background-color: #ffffff;
   box-shadow: 0 8px 24px rgb(0 0 0 / 10%);
+  /* アプリ全体にフォントを適用する */
+  font-family: "Hiragino Kaku Gothic Pro", "メイリオ",Arial, Helvetica, sans-serif;
 }
 
 /* Clip tooltip so it doesn't render outside main */
@@ -41,20 +43,39 @@ input:focus {
   outline: 2px solid rgb(29 127 215 / 20%);
 }
 
-button {
+button.search {
   margin-top: 8px;
   padding: 12px;
   border: none;
-  border-radius: 6px;
+  border-radius: 9999px;
   color: #ffffff;
   background-color: #1d7fd7;
   font: inherit;
   font-weight: bold;
   cursor: pointer;
+  text-transform: uppercase;
+  /* 表面のグラデーションパターン */
+  background-image: linear-gradient(to bottom right, #00c6ff, #0072ff);
+  /* ボタン下の影 */
+  box-shadow: 0px 6px 0px #002fff;
+  /* */
+  transition: filter 0.15s ease, transform 0.1s ease, box-shadow 0.1s ease;
+  text-decoration: none;
+  user-select: none;
+  display: inline-block;
+  position: relative;
 }
 
-button:hover {
-  background-color: #1769b2;
+button.search:hover {
+  /* ボタンが明るくなるアクション */
+  filter: brightness(1.20);
+  cursor: pointer;
+}
+
+button.search:active {
+  /* ボタンが沈み込むアクション */
+  transform: translateY(4px);
+  box-shadow: none;
 }
 
 /* Section styles */
@@ -162,6 +183,23 @@ main section p {
 .weather-details dd {
   margin: 0;
   font-size: 1.125rem;
+}
+
+button.reset {
+  display: block;
+  margin: 20px auto 0;
+  padding: 8px 20px;
+  border: 2px solid #213547;
+  border-radius: 9999px;
+  background: transparent;
+  color: #213547;
+  font: inherit;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+button.reset:hover {
+  background-color: #d3ecff;
 }
 
 button,
