@@ -1,17 +1,105 @@
-main {
-  width: min(90%, 480px);
-  padding: 32px;
-  border-radius: 12px;
-  background-color: #ffffff;
-  box-shadow: 0 8px 24px rgb(0 0 0 / 10%);
-  /* アプリ全体にフォントを適用する */
-  font-family: "Hiragino Kaku Gothic Pro", "メイリオ",Arial, Helvetica, sans-serif;
-}
-
-/* Clip tooltip so it doesn't render outside main */
-main {
+main.weather-app {
   position: relative;
   overflow: visible;
+
+  width: min(90%, 480px);
+  padding: 32px;
+
+  border-radius: 16px;
+
+  background:
+    var(--weather-ambient, none),
+    rgb(255 255 255 / 96%);
+
+  box-shadow:
+    0 20px 50px rgb(15 23 42 / 10%);
+
+  color: var(--weather-text, #213547);
+
+  font-family:
+    "Hiragino Kaku Gothic Pro",
+    "メイリオ",
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  transition:
+    background 0.4s ease,
+    color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+/* 天気テーマ */
+.weather-app--default {
+  --weather-ambient:
+    linear-gradient(
+      160deg,
+      rgb(186 230 253 / 12%),
+      transparent 55%
+    );
+}
+
+.weather-app--sunny {
+  --weather-ambient:
+    radial-gradient(
+      circle at 88% 10%,
+      rgb(253 224 71 / 18%),
+      transparent 34%
+    );
+}
+
+.weather-app--cloudy {
+  --weather-ambient:
+    linear-gradient(
+      160deg,
+      rgb(148 163 184 / 14%),
+      transparent 55%
+    );
+}
+
+.weather-app--fog {
+  --weather-ambient:
+    linear-gradient(
+      160deg,
+      rgb(203 213 225 / 18%),
+      transparent 60%
+    );
+}
+
+.weather-app--rain {
+  --weather-ambient:
+    linear-gradient(
+      160deg,
+      rgb(96 165 250 / 12%),
+      transparent 55%
+    );
+}
+
+.weather-app--snow {
+  --weather-ambient:
+    linear-gradient(
+      160deg,
+      rgb(186 230 253 / 16%),
+      transparent 58%
+    );
+}
+
+.weather-app--storm {
+  --weather-ambient:
+    linear-gradient(
+      160deg,
+      rgb(129 140 248 / 14%),
+      transparent 55%
+    );
+}
+
+.weather-app--night {
+  --weather-ambient:
+    linear-gradient(
+      160deg,
+      rgb(30 41 59 / 16%),
+      transparent 58%
+    );
 }
 
 h1 {
@@ -44,58 +132,67 @@ input:focus {
 }
 
 button.search {
-  margin-top: 8px;
-  padding: 12px;
-  border: none;
-  border-radius: 9999px;
-  color: #ffffff;
-  background-color: #1d7fd7;
-  font: inherit;
-  font-weight: bold;
-  cursor: pointer;
-  text-transform: uppercase;
-  /* 表面のグラデーションパターン */
-  background-image: linear-gradient(to bottom right, #00c6ff, #0072ff);
-  /* ボタン下の影 */
-  box-shadow: 0px 6px 0px #002fff;
-  /* */
-  transition: filter 0.15s ease, transform 0.1s ease, box-shadow 0.1s ease;
-  text-decoration: none;
-  user-select: none;
   display: inline-block;
   position: relative;
-}
 
-button.search:hover {
-  /* ボタンが明るくなるアクション */
-  filter: brightness(1.20);
+  margin-top: 8px;
+  padding: 12px 20px;
+
+  border: none;
+  border-radius: 10px;
+
+  color: #ffffff;
+  background: #2563eb;
+
+  font: inherit;
+  font-weight: 700;
+
   cursor: pointer;
+  user-select: none;
+
+  box-shadow:
+    0 4px 12px rgb(37 99 235 / 20%);
+
+  transition:
+    background-color 0.2s ease,
+    transform 0.15s ease,
+    box-shadow 0.2s ease;
 }
 
+/* ボタンホバー時のアクション */
+button.search:hover {
+  background: #1d4ed8;
+
+  box-shadow:
+    0 6px 16px rgb(37 99 235 / 25%);
+}
+/* ボタンクリック時のアクション */
 button.search:active {
-  /* ボタンが沈み込むアクション */
-  transform: translateY(4px);
-  box-shadow: none;
+  transform: translateY(1px);
+
+  box-shadow:
+    0 2px 8px rgb(37 99 235 / 18%);
 }
 
 /* Section styles */
-main section {
+.weather-result {
   margin-top: 24px;
   padding-top: 20px;
   border-top: 1px solid #dbe3ea;
+  text-align: center;
 }
 
-main section h2 {
+.weather-result h2 {
   margin: 0 0 16px;
-  color: #213547;
+  color: inherit;
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-main section p {
+.weather-result p {
   margin: 8px 0;
-  color: #213547;
+  color: inherit;
 }
 
 /* Error message styles */
@@ -110,30 +207,71 @@ main section p {
 
 /* Weather result styles */
 .weather-result {
-  text-align: left;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid #dbe3ea;
+  text-align: center;
 }
 
 .weather-result h2 {
-  font-size: 1.5rem;
+  justify-content: center;
+  margin: 0 0 12px;
+  font-size: 1.25rem;
   line-height: 1.4;
 }
 
 #powered-by,
 #copyright {
   text-align: center;
+  color: #64748b;
+  font-size: 0.8rem;
+}
+
+#powered-by {
+  margin-top: 28px;
+}
+
+#copyright {
+  margin-top: 4px;
+}
+
+#powered-by a {
+  color: inherit;
+  text-decoration-color: #94a3b8;
+  text-underline-offset: 2px;
+}
+
+#powered-by a:hover {
+  color: #334155;
 }
 
 .weather-summary {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 20px;
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  margin: 20px 0 20px;
+  text-align: center;
 }
 
 .weather-icon {
   flex-shrink: 0;
-  font-size: 2.5rem;
+  font-size: 4.5rem;
   line-height: 1;
+}
+
+.weather-description {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.weather-temperature {
+  margin: 2px 0 0;
+  color: #0f172a;
+  font-size: clamp(2.75rem, 8vw, 4rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.04em;
 }
 
 .info-icon {
@@ -155,51 +293,70 @@ main section p {
   border-radius: 6px;
 }
 
-.weather-description {
-  font-size: 1.125rem;
-  font-weight: 600;
-}
-
 .weather-details {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 12px;
-  margin: 0;
+  width: min(100%, 220px);
+  margin: 0 auto;
 }
 
 .weather-details > div {
-  display: grid;
-  grid-template-columns: 5rem 1fr;
-  align-items: baseline;
-  column-gap: 16px;
-  padding: 12px;
-  border-radius: 6px;
-  background-color: #f3f7fa;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  padding: 16px;
+
+  border-radius: 12px;
+  background: rgb(248 250 252 / 85%);
 }
 
 .weather-details dt {
-  font-weight: 700;
+  color: #64748b;
+  font-size: 0.8rem;
+  font-weight: 600;
 }
 
 .weather-details dd {
   margin: 0;
-  font-size: 1.125rem;
+
+  color: #0f172a;
+
+  font-size: 1.25rem;
+  font-weight: 700;
 }
 
 button.reset {
   display: block;
-  margin: 20px auto 0;
-  padding: 8px 20px;
-  border: 2px solid #213547;
-  border-radius: 9999px;
-  background: transparent;
-  color: #213547;
+
+  margin: 18px auto 0;
+  padding: 9px 18px;
+
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+
+  background: rgb(255 255 255 / 72%);
+  color: #334155;
+
   font: inherit;
+  font-weight: 600;
+
   cursor: pointer;
-  transition: background-color 0.15s ease;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.15s ease;
 }
 
 button.reset:hover {
-  background-color: #d3ecff;
+  background: #f8fafc;
+  border-color: #94a3b8;
+}
+
+button.reset:active {
+  transform: translateY(1px);
 }
 
 button,
@@ -213,58 +370,6 @@ input:focus-visible {
   outline-offset: 3px;
 }
 
-/* Tooltip styles */
-.tooltip {
-  position: relative;
-  display: inline-block;
-}
-
-.tooltip-trigger {
-  display: inline-block;
-}
-
-.tooltip-bubble {
-  position: fixed;
-  background: #213547;
-  color: #fff;
-  padding: 8px 10px;
-  border-radius: 6px;
-  font-size: 0.875rem;
-  white-space: normal;
-  max-width: min(320px, calc(100% - 32px));
-  word-break: break-word;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 120ms ease, transform 120ms ease;
-  pointer-events: none;
-  z-index: 1000;
-}
-
-.tooltip-bubble.visible,
-.tooltip:hover .tooltip-bubble,
-.tooltip:focus-within .tooltip-bubble {
-  opacity: 1;
-  visibility: visible;
-  transform: translateX(-50%) translateY(0);
-  pointer-events: auto;
-}
-
-.tooltip-bubble::after {
-  content: '';
-  position: absolute;
-  left: var(--arrow-left, 50%);
-  transform: translateX(-50%);
-  border-width: 6px 6px 0 6px;
-  border-style: solid;
-}
-
-.tooltip-bubble[data-placement='top']::after {
-  bottom: -6px;
-  border-color: #213547 transparent transparent transparent;
-}
-.tooltip-bubble[data-placement='bottom']::after {
-  top: -6px;
-  border-width: 0 6px 6px 6px;
-  border-color: transparent transparent #213547 transparent;
+input:focus-visible {
+  border-color: #1d7fd7;
 }
