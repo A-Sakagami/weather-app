@@ -1,9 +1,7 @@
 import { useState } from 'react'
 import './App.css'
-import { getWeatherTheme, isDay } from "./weatherBackground"
-import { getWeatherIcon } from './weatherIcon'
+import { getWeatherTheme } from "./weatherBackground"
 import type { WeatherData } from './weatherTypes'
-import { getLocationName } from './weatherLocation'
 import { fetchWeather } from './weatherAPI'
 import { WeatherSearchForm } from './WeatherSearchForm'
 import { WeatherResult } from './WeatherResult'
@@ -53,15 +51,7 @@ function App() {
     setWeather(null)
   }
 
-  const locationName = weather
-    ? getLocationName(weather)
-    : ''
-  // 表示部分で設定しているクラスには、次の役割があります。
-  // weather-result	検索結果全体の配置を整える
-  // weather-summary	アイコンと説明文を横並びにする
-  // weather-icon	アイコンの大きさや位置を調整する
-  // weather-description	天気説明を読みやすく強調する
-  // weather-details	気温・風速を同じ形式で配置する
+
   return (
     <main className={`weather-app weather-app--${theme}`}>
       <h1>お天気アプリ</h1>
