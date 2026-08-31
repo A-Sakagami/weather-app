@@ -28,6 +28,10 @@ export function isDay(time?: string): boolean {
   return hour >= 6 && hour < 18
 }
 
+/** 
+ * 天気コードと時刻から、UIに適用するテーマ名を返す関数
+ * 夜間でも晴れ・おおむね晴れ以外は天気を優先する
+ */
 export function getWeatherTheme(
   weatherCode?: number,
   time?: string,
@@ -36,14 +40,16 @@ export function getWeatherTheme(
     return 'default'
   }
 
-  if (!isDay(time)) {
-    return 'night'
-  }
-
+  // 天気コードをカテゴリに変換
   const category = getWeatherCategory(weatherCode)
 
   if (category === 'unknown') {
     return 'default'
+  }
+
+  // 晴れ・おおむね晴れの場合のみ夜間テーマを優先
+  if (category === 'sunny' && !isDay(time)) {
+    return 'night'
   }
 
   return category
