@@ -1,3 +1,5 @@
+import type { SyntheticEvent } from 'react'
+
 type WeatherSearchFormProps = {
   onSubmit: (formData: FormData) => void | Promise<void>
   error: string
@@ -9,9 +11,19 @@ export function WeatherSearchForm({
   error,
   loading,
 }: WeatherSearchFormProps) {
+  const handleSubmit = async (
+    event: SyntheticEvent<HTMLFormElement, SubmitEvent>,
+  ) => {
+    event.preventDefault()
+
+    const formData = new FormData(event.currentTarget)
+
+    await onSubmit(formData)
+  }
+
   return (
     <>
-      <form action={onSubmit}>
+      <form onSubmit={handleSubmit}>
         <label htmlFor="city">都市名</label>
 
         <input
@@ -30,7 +42,10 @@ export function WeatherSearchForm({
         >
           {loading ? (
             <>
-              <span className="loading-spinner" aria-hidden="true" />
+              <span
+                className="loading-spinner"
+                aria-hidden="true"
+              />
               取得中…
             </>
           ) : (
