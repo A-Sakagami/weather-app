@@ -48,7 +48,7 @@ function App() {
     } catch {
       setWeather(null)
       setError('天気情報を取得できませんでした。都市名を確認してください。')
-    }finally {
+    } finally {
       setLoading(false)
     }
   }
@@ -57,9 +57,6 @@ function App() {
     setView('search')
     setWeather(null)
   }
-
-  
-
 
   return (
     <main className={`weather-app weather-app--${theme}`}>
