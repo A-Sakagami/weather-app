@@ -1,11 +1,13 @@
 type WeatherSearchFormProps = {
   onSubmit: (formData: FormData) => void | Promise<void>
   error: string
+  loading: boolean
 }
 
 export function WeatherSearchForm({
   onSubmit,
   error,
+  loading,
 }: WeatherSearchFormProps) {
   return (
     <>
@@ -21,8 +23,19 @@ export function WeatherSearchForm({
           required
         />
 
-        <button className="search" type="submit">
-          天気を調べる
+        <button
+          className="search"
+          type="submit"
+          disabled={loading}
+        >
+          {loading ? (
+            <>
+              <span className="loading-spinner" aria-hidden="true" />
+              取得中…
+            </>
+          ) : (
+            '天気を調べる'
+          )}
         </button>
       </form>
 

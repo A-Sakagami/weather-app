@@ -6,6 +6,7 @@ import { fetchWeather } from './weatherAPI'
 import { WeatherSearchForm } from './WeatherSearchForm'
 import { WeatherResult } from './WeatherResult'
 
+
 function App() {
   // 正常に取得できた天気情報を保持する。
   // まだ検索していない場合や取得に失敗した場合はnullになる。
@@ -16,11 +17,14 @@ function App() {
   // 空文字の場合はエラーを表示しない。
   const [error, setError] = useState('')
 
-  // 
+  // リザルト画面の背景テーマ
   const theme = getWeatherTheme(
     weather?.weatherCode,
     weather?.time,
   )
+
+  // 検索中のローディング表示
+  const [loading, setLoading] = useState(false);
 
   // フォーム送信時に都市名を受け取り、バックエンドから天気情報を取得する。
   // apiの応答を待つため、非同期関数asyncとして定義する。
@@ -34,15 +38,18 @@ function App() {
 
     // 前回の検索で表示されたエラーを消してから、新しい検索を始める。
     setError('')
+    // ローディング画面を表示する
+    setLoading(true)
 
    try {
       const data = await fetchWeather(city)
-
       setWeather(data)
       setView('result')
     } catch {
       setWeather(null)
       setError('天気情報を取得できませんでした。都市名を確認してください。')
+    }finally {
+      setLoading(false)
     }
   }
 
@@ -50,6 +57,8 @@ function App() {
     setView('search')
     setWeather(null)
   }
+
+  
 
 
   return (
@@ -60,6 +69,7 @@ function App() {
         <WeatherSearchForm
           onSubmit={handleSubmit}
           error={error}
+          loading={loading}
         />
       ) : weather && (
         <WeatherResult
