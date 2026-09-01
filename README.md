@@ -17,7 +17,6 @@ Java、Spring Boot、React、AWSを使用して作成したシンプルな天気
 - [x] Github Actionsを用いたテスト自動化
 - [x] Github Releasesを用いてリリース
 - [x] AWSへのデプロイ
-- [] CI/CD自動化
-- [] テスト自動化
-
-## 
+- [ ] CI/CD自動化
+- [ ] テスト自動化
+ 
