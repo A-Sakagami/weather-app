@@ -47,7 +47,9 @@ function App() {
       setView('result')
     } catch {
       setWeather(null)
-      setError('天気情報を取得できませんでした。都市名を確認してください。')
+      setError(
+        '天気情報を取得できませんでした。都市名や通信状況を確認して、もう一度お試しください。',
+      )
     } finally {
       setLoading(false)
     }
