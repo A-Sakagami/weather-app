@@ -11,7 +11,24 @@ export async function fetchWeather(city: string): Promise<WeatherData> {
   )
 
   if (!response.ok) {
-    throw new Error('Failed to fetch weather')
+    let errorMessage = '天気情報の取得に失敗しました。'
+
+    try {
+      const errorData: unknown = await response.json()
+
+      if (
+        typeof errorData === 'object' &&
+        errorData !== null &&
+        'message' in errorData &&
+        typeof errorData.message === 'string'
+      ) {
+        errorMessage = errorData.message
+      }
+    } catch {
+      // JSON形式ではないエラーレスポンスでは既定のメッセージを使用する。
+    }
+
+    throw new Error(errorMessage)
   }
 
   return response.json()
