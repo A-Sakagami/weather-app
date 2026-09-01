@@ -41,13 +41,24 @@ function App() {
     // ローディング画面を表示する
     setLoading(true)
 
-   try {
+    try {
       const data = await fetchWeather(city)
       setWeather(data)
       setView('result')
-    } catch {
+    } catch (caughtError) {
       setWeather(null)
-      setError('天気情報を取得できませんでした。都市名を確認してください。')
+
+      if (caughtError instanceof TypeError) {
+        setError(
+          '通信に失敗しました。通信状況を確認して、もう一度お試しください。',
+        )
+      } else if (caughtError instanceof Error) {
+        setError(caughtError.message)
+      } else {
+        setError(
+          '天気情報を取得できませんでした。もう一度お試しください。',
+        )
+      }
     } finally {
       setLoading(false)
     }

@@ -32,6 +32,8 @@ export function WeatherSearchForm({
           type="text"
           placeholder="例：Tokyo"
           autoComplete="address-level2"
+          aria-invalid={Boolean(error)}
+          aria-describedby={error ? 'city-error' : undefined}
           required
         />
 
@@ -54,7 +56,11 @@ export function WeatherSearchForm({
         </button>
       </form>
 
-      {error && <p role="alert">{error}</p>}
+      {error && (
+        <p id="city-error" role="alert">
+          {error}
+        </p>
+      )}
     </>
   )
 }
