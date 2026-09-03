@@ -18,6 +18,9 @@ export function WeatherResult({
   onReset,
 }: WeatherResultProps) {
   const locationName = getLocationName(weather)
+  const observationTime = weather.time
+    .slice(0, 16)
+    .replace('T', ' ')
 
   return (
     <>
@@ -42,6 +45,14 @@ export function WeatherResult({
           <div>
             <dt>風速</dt>
             <dd>{weather.windSpeed}m/s</dd>
+          </div>
+          <div>
+            <dt>観測時刻</dt>
+            <dd>
+              <time dateTime={weather.time}>
+                {observationTime}
+              </time>
+            </dd>
           </div>
         </dl>
       </section>
