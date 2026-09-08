@@ -26,6 +26,9 @@ function App() {
   // 検索中のローディング表示
   const [loading, setLoading] = useState(false);
 
+  // 検索履歴を保持・表示する
+  const [searchHistory, setSearchHistory] = useState<string[]>([])
+
   // フォーム送信時に都市名を受け取り、バックエンドから天気情報を取得する。
   // apiの応答を待つため、非同期関数asyncとして定義する。
   const handleSubmit = async (formData: FormData) => {
@@ -42,7 +45,18 @@ function App() {
     setLoading(true)
 
     try {
-      const data = await fetchWeather(city)
+      const searchedCity = city.trim()
+      const data = await fetchWeather(searchedCity)
+      // 検索履歴に追加する。重複は削除し、最大5件まで保持する。
+      setSearchHistory((previous) =>
+        [
+          searchedCity,
+          ...previous.filter(
+            (item) => item.toLowerCase() !== searchedCity.toLowerCase(),
+          ),
+        ].slice(0, 5),
+      )
+
       setWeather(data)
       setView('result')
     } catch (caughtError) {
@@ -74,11 +88,33 @@ function App() {
       <h1>お天気アプリ</h1>
 
       {view === 'search' ? (
-        <WeatherSearchForm
-          onSubmit={handleSubmit}
-          error={error}
-          loading={loading}
-        />
+        <>
+          <WeatherSearchForm
+            onSubmit={handleSubmit}
+            error={error}
+            loading={loading}
+          />
+
+          {searchHistory.length > 0 && (
+            <section aria-label="検索履歴">
+              <h2>最近検索した都市</h2>
+              {searchHistory.map((city) => (
+                <button
+                  key={city}
+                  type="button"
+                  disabled={loading}
+                  onClick={() => {
+                    const formData = new FormData()
+                    formData.set('city', city)
+                    void handleSubmit(formData)
+                  }}
+                >
+                  {city}
+                </button>
+              ))}
+            </section>
+          )}
+        </>
       ) : weather && (
         <WeatherResult
           weather={weather}

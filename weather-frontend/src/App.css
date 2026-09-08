@@ -145,7 +145,7 @@ button.search {
   border-radius: 10px;
 
   color: #ffffff;
-  background: #2563eb;
+  background: #2e6aec;
 
   font: inherit;
   font-weight: 700;
@@ -405,4 +405,45 @@ input:focus-visible {
   to {
     transform: rotate(360deg);
   }
+}
+
+/* 検索履歴 */
+section[aria-label="検索履歴"] {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+section[aria-label="検索履歴"] h2 {
+  width: 100%;
+  margin: 0 0 0.25rem;
+  font-size: 1rem;
+  color: #526579;
+}
+
+section[aria-label="検索履歴"] button {
+  padding: 0.6rem 1rem;
+  border: 1px solid #6e9ac9;
+  border-radius: 999px;
+  background: #f3f7fc;
+  color: #374f66;
+  font: inherit;
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+
+section[aria-label="検索履歴"] button:hover:not(:disabled) {
+  background: #c7ddf5;
+  border-color: #7da5d0;
+  color: #274766;
+}
+section[aria-label="検索履歴"] button:focus-visible {
+  outline: 4px solid #2c161d;
+  outline-offset: 3px;
+}
+
+section[aria-label="検索履歴"] button:disabled {
+  opacity: 0.5;
+  cursor: wait;
 }
